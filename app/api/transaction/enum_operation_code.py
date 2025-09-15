@@ -35,3 +35,4 @@ class EnumOperationCode(Enum):
     OP_1050005 = '1050005'  # Role - View
     # --------------------- Data Processing - IA ---------------------
     OP_2000001 = '2000001'  # Data Processing - Execute
+    OP_3000001 = "3000001"  # Catalog - Execute

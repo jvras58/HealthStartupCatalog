@@ -32,6 +32,7 @@ app_models = [
     'app.models.assignment',
     'app.models.authorization',
     'app.models.processed_data',
+    'app.models.startup',
 ]
 
 for module in app_models:
