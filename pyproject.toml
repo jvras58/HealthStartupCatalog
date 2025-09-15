@@ -1,0 +1,62 @@
+[project]
+name = "FastAPI-CrewAI"
+version = "0.1.0"
+description = "Basic CRUD API with FastAPI, SQLAlchemy, and Alembic, integrated with CrewAI and LangChain for advanced AI capabilities."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "alembic>=1.16.5",
+    "bcrypt>=4.3.0",
+    "crewai>=0.186.1",
+    "fastapi>=0.116.1",
+    "langchain>=0.3.27",
+    "langchain-google-genai>=2.1.10",
+    "pydantic-settings>=2.10.1",
+    "pydantic[email]>=2.11.9",
+    "python-jose[cryptography]>=3.5.0",
+    "python-multipart>=0.0.20",
+    "requests>=2.32.5",
+    "sqlalchemy>=2.0.43",
+    "uvicorn>=0.35.0",
+]
+[tool.setuptools.packages.find]
+where = ["app"]
+
+[dependency-groups]
+dev = [
+    "blue>=0.9.1",
+    "commitizen>=4.9.1",
+    "factory-boy>=3.3.3",
+    "httpx>=0.28.1",
+    "isort>=6.0.1",
+    "pytest>=8.4.2",
+    "pytest-cov>=7.0.0",
+    "ruff>=0.13.0",
+    "taskipy>=1.14.1",
+]
+
+[tool.taskipy.tasks]
+lint = "ruff check . && blue --check . --diff"
+format = "blue . && isort ."
+run = "uvicorn app.startup:app --host 0.0.0.0 --port 8000 --reload"
+pre_test = "task lint"
+test = "pytest -s -x --cov=app -vv"
+post_test = "coverage html"
+export_libs = "uv pip freeze > requirements.txt"
+migrate = "alembic upgrade head"
+seed_super_user = "python -m seeds.seed_super_user"
+seed_transactions = "python -m seeds.seed_transactions"
+setup_db = "alembic upgrade head && python -m seeds.seed_transactions && python -m seeds.seed_super_user"
+
+[tool.isort]
+profile = "black"
+line_length = 88
+extend_skip = ["migrations"]
+
+[tool.uv]
+package = true
+
+[tool.ruff]
+line-length = 88
+select = ["E", "F", "I", "W", "UP", "B", "SIM"]
+exclude = [".venv", "migrations"]
