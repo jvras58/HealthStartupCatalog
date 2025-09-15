@@ -1,3 +1,5 @@
+from typing import Any
+
 from pydantic import BaseModel
 
 
@@ -8,6 +10,7 @@ class DataProcessRequest(BaseModel):
 class DataProcessResponse(BaseModel):
     processed_result: str
 
+
 class CatalogRequest(BaseModel):
     url: str | None
     clues: str | None
@@ -15,5 +18,5 @@ class CatalogRequest(BaseModel):
 
 
 class CatalogResponse(BaseModel):
-    startup: dict[str, any]  # Campos da startup
-    traces: dict[str, dict[str, any]]  # Traces por campo
+    startup: dict[str, Any]  # Campos da startup
+    traces: dict[str, dict[str, Any]]  # Traces por campo

@@ -1,6 +1,9 @@
+from typing import Any
+
 import pdfplumber
 from crewai import Agent, Crew, Task
-from crewai_tools import ScrapeWebsiteTool, tools
+from crewai.tools import tool
+from crewai_tools import ScrapeWebsiteTool
 from sqlalchemy.orm import Session
 
 from app.models.startup import Startup
@@ -10,15 +13,28 @@ from app.utils.llm import get_llm
 
 llm = get_llm()
 
-
+# TODO: REFACTOR: (https://chatgpt.com/share/68c8536d-fc6c-8007-b69f-3563ef124a12).
 # Função para parsing de PDF
-@tools("Extrai texto de arquivos PDF usando pdfplumber.")
+@tool("Extrai texto de arquivos PDF usando pdfplumber.")
 def parse_pdf(file_path: str) -> str:
-    with pdfplumber.open(file_path) as pdf:
-        text = "\n".join(
-            page.extract_text() for page in pdf.pages if page.extract_text()
-        )
-    return text
+    """Extrai texto de um PDF, ignorando páginas sem conteúdo e retornando erros legíveis.
+
+    Args:
+        file_path: Caminho do arquivo PDF.
+    Returns:
+        Texto concatenado das páginas com conteúdo. Em caso de falha, retorna uma
+        mensagem iniciada por [parse_pdf_error].
+    """
+    try:
+        with pdfplumber.open(file_path) as pdf:
+            chunks = []
+            for p in pdf.pages:
+                t = p.extract_text() or ""
+                if t.strip():
+                    chunks.append(t)
+            return "\n".join(chunks)
+    except Exception as e:
+        return f"[parse_pdf_error] {type(e).__name__}: {e}"
 
 
 def create_catalog_crew(url: str = None, pdf_path: str = None, clues: str = None):
@@ -103,7 +119,7 @@ class DataProcessingController(GenericController):
         pdf_path: str = None,
         clues: str = None,
         user: User = None,
-    ):
+    ) -> dict[str, Any]:
         crew = create_catalog_crew(url=url, pdf_path=pdf_path, clues=clues)
         result = crew.kickoff()
 
