@@ -18,17 +18,18 @@ controller = DataProcessingController()
 DbSession = Annotated[Session, Depends(get_session)]
 CurrentUser = Annotated[User, Depends(get_current_user)]
 
-@router.post("/catalog", response_model=CatalogResponse)
+
+@router.post('/catalog', response_model=CatalogResponse)
 def process_catalog(
     request: CatalogRequest,
     pdf: UploadFile | None = None,
     db_session: DbSession = DbSession,
     current_user: CurrentUser = CurrentUser,
 ):
-    validate_transaction_access(db_session, current_user, "OP_3000001")
+    validate_transaction_access(db_session, current_user, 'OP_3000001')
     pdf_path = None
     if pdf:
-        with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as tmp:
+        with tempfile.NamedTemporaryFile(delete=False, suffix='.pdf') as tmp:
             content = pdf.file.read()
             tmp.write(content)
             pdf_path = tmp.name
