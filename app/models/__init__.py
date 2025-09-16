@@ -9,7 +9,7 @@ Ref: https://stackoverflow.com/questions/9088957/sqlalchemy-cannot-find-a-class-
 from app.models.assignment import Assignment  # noqa F401
 from app.models.authorization import Authorization  # noqa F401
 from app.models.processed_data import ProcessedData  # noqa F401
-from app.models.startup import Startup  # noqa F401
 from app.models.role import Role  # noqa F401
+from app.models.startup import Startup  # noqa F401
 from app.models.transaction import Transaction  # noqa F401
 from app.models.user import User  # noqa F401
