@@ -89,7 +89,7 @@ FastAPI/
 ├── .secrets/                   # Arquivos sensíveis (ex.: SECURITY_API_SECRET_KEY)
 ├── .env-semple                 # Modelo para arquivo de configuração .env
 ├── alembic.ini                 # Configuração do Alembic
-├── poetry.lock                 # Lockfile do Poetry com dependências fixas
+
 ├── pyproject.toml              # Configuração do projeto e dependências
 ├── .gitignore                  # Arquivos e pastas ignorados pelo Git
 ├── .tool-versions              # Versões das ferramentas utilizadas

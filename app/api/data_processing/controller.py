@@ -1,3 +1,4 @@
+"""Controller for data processing using AI agents."""
 from crewai import Agent, Crew, Task
 from sqlalchemy.orm import Session
 
@@ -8,6 +9,7 @@ from app.utils.llm import get_llm
 
 
 class DataProcessingController(GenericController):
+    """Controller for processing and persisting data using AI agents."""
     def __init__(self):
         super().__init__(ProcessedData)
 
@@ -18,6 +20,7 @@ class DataProcessingController(GenericController):
         user: User,
         user_ip: str,
     ) -> ProcessedData:
+        """Process input text using AI agents and persist the result."""
         llm = get_llm()
         analyst_agent = Agent(
             role='Analista de Dados',
@@ -31,7 +34,7 @@ class DataProcessingController(GenericController):
             agent=analyst_agent,
             expected_output='Resultado processado.',
         )
-        crew = Crew(agents=[analyst_agent], tasks=[task], verbose=True)
+        crew = Crew(agents=[analyst_agent], tasks=[task], verbose=False)
         result = crew.kickoff()
 
         processed = ProcessedData(
